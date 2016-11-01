@@ -21,9 +21,9 @@ import com.eferhatg.mylibrary.R;
 /**
  * Created by aykutasil on 18.09.2016.
  */
-public class AnimatedBar extends View {
+public class AnimatedBarView extends View {
 
-    private static final String TAG = AnimatedBar.class.getSimpleName();
+    private static final String TAG = AnimatedBarView.class.getSimpleName();
 
     Context mContext;
     boolean ButtonClick = false;
@@ -57,11 +57,11 @@ public class AnimatedBar extends View {
         RIGHT
     }
 
-    List<BarImageModel> mListImages;
-    private String TitleList = "My List";
-    private int IMAGES_COUNT = 3;
 
-    public AnimatedBar(Context context, AttributeSet attrs) {
+    private String TitleList = "My List";
+
+
+    public AnimatedBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
@@ -121,11 +121,6 @@ public class AnimatedBar extends View {
         this.alphaViewValue = val;
     }
 
-
-    public void setShowImagesCount(int count) {
-        this.IMAGES_COUNT = count;
-    }
-
     public void setTitleList(String title) {
         this.TitleList = title;
     }
@@ -170,7 +165,7 @@ public class AnimatedBar extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        drawBarLeft(canvas);
+        drawBar(canvas);
         drawBarRight(canvas);
     }
 
@@ -201,72 +196,12 @@ public class AnimatedBar extends View {
         });
         animatorAHeight.start();
 
-
-        int computePercentB = (int) (((float) mValueBarRight / (float) (mValueBarLeft + mValueBarRight)) * 100);
-        final float computeBarRightValue = ((getHeight() - 130) * computePercentB / 100);
-
-        final ValueAnimator animatorBHeight = ValueAnimator.ofFloat(0, computeBarRightValue);
-        animatorBHeight.setDuration(animBarDuration);
-
-        animatorBHeight.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                animRightValue = (float) animatorBHeight.getAnimatedValue();
-                if ((float) animatorBHeight.getAnimatedValue() == computeBarRightValue) {
-                    isFinishAnimBarRight = true;
-                }
-                invalidate();
-            }
-        });
-        animatorBHeight.start();
     }
 
 
 
 
-    private void drawBarLeft(Canvas canvas) {
-        //float center = getWidth() / 2;
 
-        if (!isAutoShow) return;
-
-        mPaintBarLeft = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintBarLeft.setColor(mColorBarLeft);
-
-
-        Resources resources = getResources();
-        float scale = resources.getDisplayMetrics().density;
-        Log.i(TAG, "Scale: " + scale);
-
-        float startPoint = (getWidth() / 4) - widthBarLeft;
-        float endPoint = (getWidth() / 4) + widthBarLeft;
-
-        // Eğer xml içerisinde bar değeri verilmişse animValue yi valueABar a eşitliyoruz.
-        if (!ButtonClick) animLeftValue = mValueBarLeft;
-
-
-        mRectBarLeft = new RectF(startPoint, (getHeight() - animLeftValue), endPoint, getHeight());
-        canvas.drawRect(mRectBarLeft, mPaintBarLeft);
-
-        if (isFinishAnimBarLeft) {
-            //Logger.i("Anim Bar LEFT finised ");
-
-            int computePercentA = (int) (((float) mValueBarLeft / (float) (mValueBarLeft + mValueBarRight)) * 100);
-            float textStart = startPoint + (mRectBarLeft.width() / 2);
-            float textEnd = getHeight() - mRectBarLeft.height() - (widthBarLeft / 2);
-
-            Paint percentText = new Paint();
-            percentText.setTextSize((int) (17 * scale));
-            percentText.setColor(Color.BLACK);
-            percentText.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-            percentText.setTextAlign(Paint.Align.CENTER);
-
-            String barText = computePercentA + " %";
-            Rect barTextRect = new Rect();
-            percentText.getTextBounds(barText, 0, barText.length(), barTextRect);
-
-            canvas.drawText(barText, textStart, textEnd, percentText);
-        }
-    }
 
 
     private void drawBarRight(Canvas canvas) {
@@ -366,6 +301,25 @@ public class AnimatedBar extends View {
         float y = barCenter + (bounds.height() / 2);
         canvas.drawText(valueString, fillPosition, y, currentValuePaint);
         */
+
+        final float computeBarLeftValue = ((getHeight() - 130) * 60 / 100);
+
+        final ValueAnimator animatorAHeight = ValueAnimator.ofFloat(0, computeBarLeftValue);
+        animatorAHeight.setDuration(animBarDuration);
+
+        animatorAHeight.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                animLeftValue = (float) animatorAHeight.getAnimatedValue();
+                if ((float) animatorAHeight.getAnimatedValue() == computeBarLeftValue) {
+                    isFinishAnimBarLeft = true;
+                }
+                invalidate();
+            }
+        });
+        animatorAHeight.start();
+
+
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         canvas.drawLine(0, 0, 200, 200, mPaint);
     }
@@ -402,7 +356,7 @@ public class AnimatedBar extends View {
         //size += labelPaint.getFontSpacing();
         //float maxValueTextSpacing = maxValuePaint.getFontSpacing();
         //size += Math.max(maxValueTextSpacing, Math.max(barHeight, circleRadius * 2));
-        size += PercentBarView.this.getRootView().getMeasuredHeight();
+        size += this.getRootView().getMeasuredHeight();
         return resolveSizeAndState(size, measureSpec, 0);
     }
 

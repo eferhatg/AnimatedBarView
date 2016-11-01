@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomAnswerPercent">
+        <attr name="barLeftWidth" format="integer" />
+        <attr name="barRightWidth" format="integer" />
+        <attr name="barLeftValue" format="integer" />
+        <attr name="barRightValue" format="integer" />
+        <attr name="barSValue" format="integer" />
+        <attr name="barLeftColor" format="color" />
+        <attr name="barRightColor" format="color" />
+        <attr name="animBarDuration" format="float" />
+        <attr name="animAlphaViewDuration" format="float" />
+        <attr name="alphaViewValue" format="float" />
+        <attr name="autoShow" format="boolean" />
+    </declare-styleable>
+</resources>
