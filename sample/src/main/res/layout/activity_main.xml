@@ -12,6 +12,12 @@
     tools:context="com.eferhatg.animatedbarview.MainActivity">
 
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/ll"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:background="@color/colorPrimary"></LinearLayout>
 
 
     <com.eferhatg.core.AnimatedBarView

@@ -165,7 +165,7 @@ public class AnimatedBarView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        drawBar(canvas);
+      //  drawBar(canvas);
         drawBarRight(canvas);
     }
 
@@ -179,7 +179,7 @@ public class AnimatedBarView extends View {
         // Örnek : Host View yüksekliği = 720 , bar oranı = %50
         // - 100 = 620 -> en üstteki yazı için yer açıyoruz
         // * (50 / 100) = 310 -> bar ın gösterileceği yükseklik
-        final float computeBarLeftValue = ((getHeight() - 130) * computePercentA / 100);
+        final float computeBarLeftValue = getHeight();
 
         final ValueAnimator animatorAHeight = ValueAnimator.ofFloat(0, computeBarLeftValue);
         animatorAHeight.setDuration(animBarDuration);
@@ -215,12 +215,12 @@ public class AnimatedBarView extends View {
         Resources resources = getResources();
         float scale = resources.getDisplayMetrics().density;
 
-        float startPoint = getWidth() - (getWidth() / 4) - widthBarRight;
-        float endPoint = getWidth() - (getWidth() / 4) + widthBarRight;
+        float startPoint = 0;
+        float endPoint = 100;
 
         // Eğer xml içerisinde bar değeri verilmişse animValue yi valueABar a eşitliyoruz.
         if (!ButtonClick) animRightValue = mValueBarRight;
-        mRectBarRight = new RectF(startPoint, (getHeight() - animRightValue), endPoint, getHeight());
+        mRectBarRight = new RectF(startPoint, 0, endPoint, 400);
         canvas.drawRect(mRectBarRight, mPaintBarRight);
 
         if (isFinishAnimBarRight) {
@@ -312,7 +312,7 @@ public class AnimatedBarView extends View {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 animLeftValue = (float) animatorAHeight.getAnimatedValue();
                 if ((float) animatorAHeight.getAnimatedValue() == computeBarLeftValue) {
-                    isFinishAnimBarLeft = true;
+                    isFinishAnimBarRight = true;
                 }
                 invalidate();
             }
